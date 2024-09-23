@@ -2,32 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+h1{
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+    font-weight: bold;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+p {
+  font-family:'Dancing_Script', sans-serif;
+}
+
+
+/************************Button Styling***************************************/
+  
+.buy-btn {
+    position: relative;
+    color: #fff;
+    background-color: #000;
+    border: 1.5px solid #fff;
+    padding: 1rem;
+    margin-bottom: 5px;
+    overflow: hidden;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  
+  .buy-btn:after {
+    position: absolute;
+    content: 'Buy Now';
+    height: auto;
+    background-color: #ff0000;
+    color: #fff;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    inset: 0;
+    text-align: center;
+    transform: translateX(-100%);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-}
+  
+  .buy-btn:hover:after {
+    transform: translateX(0);
+    background-color: #ff0000;
+    color: #fff;
+  }

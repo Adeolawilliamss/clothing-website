@@ -1,0 +1,104 @@
+.under-links ul li {
+  position: relative;
+  color: #232324;
+  padding: 7px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.list:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 0%;
+    height: 2px;
+    background-color: blue;
+    transition: 0.2s all;
+  }
+  
+  .list:hover:after {
+    width: 80%;
+  }
+
+  .list-clsx {
+    background-color: blue;
+    color: #ffffff !important; /* Use !important to override other styles */
+  }
+
+  @media (max-width: 750px){
+    .under-links ul{
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+
+
+  /* Tab styling */
+.tabs {
+  list-style-type: none;
+  padding: 0;
+}
+
+.tab-button {
+  background-color:blue;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 3px 3px 0 0;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  background-color: #eaeaea;
+  color: #333;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+/************************Button Styling***************************************/
+.add-cart .add-to-cart-btn {
+  position: relative;
+  display: block;
+  margin: 0.5rem auto 1rem auto;
+  border: 2px solid transparent;
+  height: 40px;
+  padding: 0 30px;
+  background-color: #ef233c;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 40px;
+  transition: 0.2s all;
+}
+
+.add-cart .add-to-cart-btn > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  color: #D10024;
+  visibility: hidden;
+}
+
+.add-cart .add-to-cart-btn:hover {
+  background-color: #fff;
+  color: black;
+  border-color: #D10024;
+  padding: 0 30px 0 50px;
+}
+
+.add-cart .add-to-cart-btn:hover > span {
+  visibility: visible;
+  color: #232324;
+}
