@@ -19,24 +19,6 @@ export default function Orders() {
     fetchPayments();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    try {
-      await axiosInstance.delete(`/payments/${id}`);
-      setPayments((prev) => prev.filter((payment) => payment._id !== id));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleUpdate = async (id: string) => {
-    try {
-      await axiosInstance.patch(`/payments/${id}`, {
-        name: "Updated Name",
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <div className="p-6 bg-white text-black pt-20 min-h-screen">
@@ -60,22 +42,6 @@ export default function Orders() {
 
             <p className="text-sm">Status: {payment.status}</p>
           </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleDelete(payment._id)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
-
-            <button
-              onClick={() => handleUpdate(payment._id)}
-              className="bg-blue-500 text-white px-3 py-1 rounded"
-            >
-              Update
-            </button>
-          </div>
         </div>
       ))}
       {payments.map((payment: any) => (
@@ -95,22 +61,6 @@ export default function Orders() {
             <p className="text-sm">₦{payment.amount}</p>
 
             <p className="text-sm">Status: {payment.status}</p>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleDelete(payment._id)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
-
-            <button
-              onClick={() => handleUpdate(payment._id)}
-              className="bg-blue-500 text-white px-3 py-1 rounded"
-            >
-              Update
-            </button>
           </div>
         </div>
       ))}

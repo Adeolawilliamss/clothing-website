@@ -36,7 +36,7 @@ export default function SignIn() {
         localStorage.setItem("role", user.role);
         showAlert("success", "Login successful!");
 
-        router.push("/dashboard");
+        router.push("/dashboard/admin");
       }
     } catch (error) {
       showAlert("error", "Invalid email or password!");

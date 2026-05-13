@@ -8,7 +8,7 @@ import Link from "next/link";
 import fallbackProducts from "../data/fallbackProducts";
 
 interface Product {
-  id: number;
+  _id: number;
   title: string;
   price: number;
   image: string;
@@ -23,25 +23,30 @@ export default function ProductSection() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("https://fakestoreapi.com/products");
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/products");
 
-        if (!res.ok) throw new Error("Fetch failed");
+      const json = await res.json();
+      console.log("API RESPONSE:", json);
 
-        const data: Product[] = await res.json();
-        setProducts(data);
-      } catch (err) {
-        console.error("Using fallback:", err);
-        setError(true);
-        setProducts(fallbackProducts); // ✅ fallback works now
-      } finally {
-        setLoading(false);
+      const products = json.data?.products || json.data || json;
+      if (!Array.isArray(products)) {
+        throw new Error("API did not return an array");
       }
-    };
 
-    fetchProducts();
-  }, []);
+      setProducts(products);
+    } catch (err) {
+      console.error("Using fallback data:", err);
+      setError(true);
+      setProducts(fallbackProducts);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
 
   // ✅ Loading state
   if (loading) {
@@ -62,17 +67,14 @@ export default function ProductSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 mt-5 gap-5">
           {products.map((product) => (
-            <div key={product.id} className="shadow-lg rounded p-3">
+            <div key={product._id} className="shadow-lg rounded p-3">
               
               {/* ✅ ONLY image clickable */}
-              <Link href={`/dashboard/products/${product.id}`}>
+              <Link href={`/dashboard/products/${product._id}`}>
                 <div className="mt-5 group cursor-pointer">
-                  <img
-                    src={
-                      product.image ||
-                      `https://picsum.photos/200?random=${product.id}`
-                    }
-                    alt={product.title}
+                   <img
+                       src={product.image}
+                        alt={product.title}
                     className="h-32 mx-auto object-contain transition-transform duration-200 group-hover:scale-110"
                   />
                 </div>

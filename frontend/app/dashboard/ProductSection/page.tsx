@@ -9,6 +9,13 @@ import { FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
 import Loading from "@/app/ui/Loading";
 
+interface Product {
+  _id: number;
+  title: string;
+  price: number;
+  image: string;
+  category: string;
+}
 // ✅ Keep categories (unchanged)
 const categories = [
   "All",
@@ -28,25 +35,32 @@ export default function ProductSection() {
 
   // ✅ Safe fetch with fallback
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        // const res = await fetch("https://fakestoreapi.com/products");
-        const res = await fetch("");
-        if (!res.ok) throw new Error("Fetch failed");
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/products");
 
-        const data: Product[] = await res.json();
-        setProducts(data);
-      } catch (err) {
-        console.error("Using fallback data:", err);
-        setError(true);
-        setProducts(fallbackProducts); // ✅ fallback saves categories
-      } finally {
-        setLoading(false);
+      const json = await res.json();
+      console.log("API RESPONSE:", json);
+
+      const products = json.data?.products || json.data || json;
+
+      if (!Array.isArray(products)) {
+        throw new Error("API did not return an array");
       }
-    };
 
-    fetchProducts();
-  }, []);
+      setProducts(products);
+    } catch (err) {
+      console.error("Using fallback data:", err);
+      setError(true);
+      setProducts(fallbackProducts);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
+
 
   // ✅ Filtering STILL works
   const filteredProducts =
@@ -101,12 +115,11 @@ export default function ProductSection() {
               </p>
             ) : (
               filteredProducts.map((product) => (
-                <div key={product.id} className="shadow-lg rounded p-3">
+                <div key={product._id} className="shadow-lg rounded p-3">
                   {/* ✅ Clickable image */}
-                  <Link href={`/dashboard/products/${product.id}`}>
+                  <Link href={`/dashboard/products/${product._id}`}>
                     <div className="mt-5 group cursor-pointer">
                       <img
-                        // src={`https://picsum.photos/200?random=${product.id}`} // ✅ random images
                         src={product.image}
                         alt={product.title}
                         className="h-32 mx-auto object-contain transition-transform duration-200 group-hover:scale-110"

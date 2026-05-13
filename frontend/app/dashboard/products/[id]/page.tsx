@@ -2,7 +2,6 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { RiStarFill } from "react-icons/ri";
 import { useCart } from "@/app/Context/CardContext";
 import fallbackProducts from "../../data/fallbackProducts";
 
@@ -17,12 +16,13 @@ export default function ItemDetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`https://fakestoreapi.com/products/${id}`);
-
+        const res = await fetch(`http://localhost:8000/api/v1/products/${id}`);
         if (!res.ok) throw new Error("Fetch failed");
 
-        const data: Product = await res.json();
-        setProduct(data);
+        const json = await res.json();
+      console.log("API RESPONSE:", json);
+      const data = json.data?.product || json.data || json;
+      setProduct(data)
       } catch (err) {
         console.error("Using fallback product:", err);
         setError(true);

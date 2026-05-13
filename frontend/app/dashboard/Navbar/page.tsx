@@ -6,7 +6,7 @@ import {
   UilTruck,
   UilShoppingCart,
   UilTimes,
-  UilUser,
+  UilSearch,
   UilBars,
 } from "@iconscout/react-unicons";
 import { useCart } from "@/app/Context/CardContext";
@@ -131,17 +131,17 @@ export default function Nav() {
                 </li>
               </Link>
 
-              {role === "admin" && (
+              {/* {role === "admin" && (
                 <Link href="/dashboard/admin" onClick={handleLinkClick}>
                   <li className="font-bold hover:text-red-600">Admin</li>
                 </Link>
-              )}
+              )} */}
             </ul>
           </div>
 
           <div className="flex relative items-center gap-4">
-            <Link href="/dashboard/SignIn">
-              <UilUser size={35} />
+            <Link href="*">
+              <UilSearch size={35} />
             </Link>
 
             <Link href="/dashboard/Cart">

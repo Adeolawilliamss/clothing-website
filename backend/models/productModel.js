@@ -2,11 +2,7 @@ const mongoose = require("mongoose");
 
 //Fat models,thin controllers philosophy
 const productSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: [true, "Name of the product"],
-  },
-  title: {
+ title: {
     type: String,
     required: [true, "Name of the product"],
   },

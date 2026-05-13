@@ -18,8 +18,18 @@ export default function Products() {
   // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+ const [image, setImage] = useState<File | null>(null);
   const [price, setPrice] = useState<number | string>("");
   const [category, setCategory] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedProduct, setSelectedProduct] =
+  useState<Product | null>(null);
+
+const [updateTitle, setUpdateTitle] = useState("");
+const [updateDescription, setUpdateDescription] = useState("");
+const [updatePrice, setUpdatePrice] = useState<number | string>("");
+const [updateCategory, setUpdateCategory] = useState("");
 
   // Fetch products
   useEffect(() => {
@@ -45,6 +55,7 @@ export default function Products() {
         title,
         description,
         price,
+        image,
         category,
       });
 
@@ -75,22 +86,50 @@ export default function Products() {
     }
   };
 
-  // Update product
-  const handleUpdate = async (id: string) => {
-    try {
-      const res = await axiosInstance.patch(`/products/${id}`, {
-        title: "Updated Product",
-      });
+  const handleUpdateClick = (product: Product) => {
+  setSelectedProduct(product);
 
-      setProducts((prev) =>
-        prev.map((product) =>
-          product._id === id ? res.data.data.product : product
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  setUpdateTitle(product.title);
+  setUpdateDescription(product.description);
+  setUpdatePrice(product.price);
+  setUpdateCategory(product.category || "");
+
+  setIsModalOpen(true);
+};
+
+const handleUpdateSubmit = async (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
+
+  if (!selectedProduct) return;
+
+  try {
+    const res = await axiosInstance.patch(
+      `/products/${selectedProduct._id}`,
+      {
+        title: updateTitle,
+        description: updateDescription,
+        price: updatePrice,
+        category: updateCategory,
+      }
+    );
+
+    setProducts((prev) =>
+      prev.map((product) =>
+        product._id === selectedProduct._id
+          ? res.data.data.product
+          : product
+      )
+    );
+
+    setIsModalOpen(false);
+
+    alert("Product updated!");
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <div className="p-6 bg-white text-black pt-20 min-h-screen">
@@ -129,13 +168,40 @@ export default function Products() {
           required
         />
 
-        <input
-          type="text"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border p-3 rounded"
-        />
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  }}
+  className="border p-3 rounded"
+/>
+        <select
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+  className="border p-3 rounded"
+  required
+>
+  <option value="">Select Category</option>
+
+  <option value="men's clothing">
+    Men's Clothing
+  </option>
+
+  <option value="women's clothing">
+    Women's Clothing
+  </option>
+
+  <option value="jewelery">
+    Jewelery
+  </option>
+
+  <option value="electronics">
+    Electronics
+  </option>
+</select>
 
         <button
           type="submit"
@@ -174,7 +240,7 @@ export default function Products() {
 
             <div className="flex gap-3">
               <button
-                onClick={() => handleUpdate(product._id)}
+                onClick={() => handleUpdateClick(product)}
                 className="bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Update
@@ -190,6 +256,90 @@ export default function Products() {
           </div>
         ))}
       </div>
+
+      {isModalOpen && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 className="text-xl font-bold mb-4">
+        Update Product
+      </h2>
+
+      <form
+        onSubmit={handleUpdateSubmit}
+        className="flex flex-col gap-4"
+      >
+        <input
+          type="text"
+          value={updateTitle}
+          onChange={(e) =>
+            setUpdateTitle(e.target.value)
+          }
+          className="border p-3 rounded"
+        />
+
+        <textarea
+          value={updateDescription}
+          onChange={(e) =>
+            setUpdateDescription(e.target.value)
+          }
+          className="border p-3 rounded"
+        />
+
+        <input
+          type="number"
+          value={updatePrice}
+          onChange={(e) =>
+            setUpdatePrice(Number(e.target.value))
+          }
+          className="border p-3 rounded"
+        />
+
+        <select
+          value={updateCategory}
+          onChange={(e) =>
+            setUpdateCategory(e.target.value)
+          }
+          className="border p-3 rounded"
+        >
+          <option value="">Select Category</option>
+
+          <option value="men's clothing">
+            Men's Clothing
+          </option>
+
+          <option value="women's clothing">
+            Women's Clothing
+          </option>
+
+          <option value="jewelery">
+            Jewelery
+          </option>
+
+          <option value="electronics">
+            Electronics
+          </option>
+        </select>
+
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+          >
+            Save Changes
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(false)}
+            className="bg-gray-400 text-white px-4 py-2 rounded w-full"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 }
