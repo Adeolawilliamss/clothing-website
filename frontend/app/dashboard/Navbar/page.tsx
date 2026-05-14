@@ -2,21 +2,31 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { FaSearch } from "react-icons/fa";
 import {
   UilTruck,
   UilShoppingCart,
   UilTimes,
-  UilSearch,
   UilBars,
 } from "@iconscout/react-unicons";
 import { useCart } from "@/app/Context/CardContext";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
+import {
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import "./Navbar.css";
 
 export default function Nav() {
+  const router = useRouter();
+const searchParams = useSearchParams();
+
+const [search, setSearch] = useState(
+  searchParams.get("search") || ""
+);
+const [searchLoading, setSearchLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [role, setRole] = useState(null);
   const { cartItems } = useCart();
   const pathname = usePathname();
 
@@ -32,16 +42,28 @@ export default function Nav() {
     mobileNavClose(); // Close the menu when a link is clicked
   };
 
-  useEffect(() => {
-    const storedRole = localStorage.getItem("role");
-    setRole(storedRole);
-  }, []);
-
   // Typing the reduce parameters
   const totalItems = cartItems.reduce(
     (total: number, item: CartItem) => total + item.quantity,
     0,
   );
+
+  useEffect(() => {
+  // Don't search if input empty
+  if (!search.trim()) return;
+
+  setSearchLoading(true);
+
+  const timeout = setTimeout(() => {
+    router.replace(
+      `/dashboard/Menu?search=${search}`
+    );
+
+    setSearchLoading(false);
+  }, 500);
+
+  return () => clearTimeout(timeout);
+}, [search, router]);
 
   return (
     <nav
@@ -84,7 +106,7 @@ export default function Nav() {
             <div className="flex items-center gap-2">
               <UilTruck size={35} />
               <h1 className="mt-1 text-lg text-black dark:text-red-500">
-                AdeGadgets
+                AdeFashion
               </h1>
             </div>
           </Link>
@@ -130,19 +152,27 @@ export default function Nav() {
                   Contact
                 </li>
               </Link>
-
-              {/* {role === "admin" && (
-                <Link href="/dashboard/admin" onClick={handleLinkClick}>
-                  <li className="font-bold hover:text-red-600">Admin</li>
-                </Link>
-              )} */}
             </ul>
           </div>
 
           <div className="flex relative items-center gap-4">
-            <Link href="*">
-              <UilSearch size={35} />
-            </Link>
+<div className="flex items-center gap-2">
+  <input
+    type="text"
+    placeholder="Search products..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="border rounded px-3 py-1 text-black w-40 md:w-56"
+  />
+
+  {searchLoading ? (
+    <span className="text-xs text-gray-500">
+      Loading...
+    </span>
+  ) : (
+    <FaSearch size={28} />
+  )}
+</div>
 
             <Link href="/dashboard/Cart">
               <UilShoppingCart size={35} />

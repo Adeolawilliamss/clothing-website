@@ -137,7 +137,10 @@ export default function ProductSection() {
                   </div>
 
                   <div className="mt-4 text-center font-bold text-lg text-black dark:text-white">
-                    ${product.price.toFixed(2)}
+                    {new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(product.price)}
                   </div>
 
                   {/* ✅ Add to cart */}

@@ -13,6 +13,15 @@ export default function ItemDetails() {
   const { addToCart, setSelectedProduct } = useCart(); // Access setSelectedProduct from the context
   const [error, setError] = useState(false);
 
+  interface Product {
+  _id: string | number;
+  title: string;
+  price: number;
+  image: string;
+  category: string;
+  description: string;
+}
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -28,7 +37,9 @@ export default function ItemDetails() {
         setError(true);
 
         // ✅ Find product from fallback using ID
-        const fallback = fallbackProducts.find((p) => p.id === Number(id));
+       const fallback = fallbackProducts.find(
+  (p) => p._id === Number(id)
+);
 
         setProduct(fallback || fallbackProducts[0]); // fallback safety
       } finally {
@@ -67,7 +78,7 @@ export default function ItemDetails() {
           </p>
         )}
         <div
-          key={product.id}
+          key={product._id}
           className="flex flex-col md:flex-row items-center gap-5 md:space-x-5"
         >
           {/* Product Image */}
@@ -75,7 +86,7 @@ export default function ItemDetails() {
             <img
               src={
                 product.image ||
-                `https://picsum.photos/400?random=${product.id}`
+                `https://picsum.photos/400?random=${product._id}`
               }
               alt={product.title}
               className="w-20 h-20 md:h-[25rem] md:w-[25rem] object-contain transition-transform duration-200 transform group-hover:scale-110 mb-3 md:mb-0"
@@ -100,7 +111,10 @@ export default function ItemDetails() {
             {/* Price and Buttons */}
             <div className="flex flex-col mt-2 gap-5 ">
               <div className="text-lg text-black dark:text-white font-semibold">
-                ${product.price.toFixed(2)}
+{new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(product.price)}
               </div>
 
               <div className="flex">

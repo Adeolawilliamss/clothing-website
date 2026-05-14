@@ -3,10 +3,16 @@
 import Link from "next/link";
 import { outfit } from "@/app/ui/fonts";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import axiosInstance from "@/app/ui/axios";
 
-export default function AdminLayout({ children }) {
+interface AdminLayoutProps {
+  children: ReactNode;
+}
+
+export default function AdminLayout({
+  children,
+}: AdminLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -41,29 +47,29 @@ export default function AdminLayout({ children }) {
   }, [router]);
 
   const handleLogout = async () => {
-  try {
-    const token = localStorage.getItem("accessToken");
+    try {
+      const token = localStorage.getItem("accessToken");
 
-    // call backend logout
-    await axiosInstance.post(
-      "/users/logout",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  } catch (error) {
-    console.log("Logout error:", error);
-  } finally {
-    // always clear local state
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("role");
+      // call backend logout
+      await axiosInstance.post(
+        "/users/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log("Logout error:", error);
+    } finally {
+      // always clear local state
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
 
-    router.push("/dashboard");
-  }
-};
+      router.push("/dashboard");
+    }
+  };
 
   const links = [
     { name: "Dashboard", href: "/dashboard/admin" },
@@ -102,14 +108,15 @@ export default function AdminLayout({ children }) {
               </Link>
             </li>
           ))}
+
           <li>
-  <button
-    onClick={handleLogout}
-    className="block p-2 rounded w-full text-left hover:bg-gray-800"
-  >
-    Sign Out
-  </button>
-</li>
+            <button
+              onClick={handleLogout}
+              className="block p-2 rounded w-full text-left hover:bg-gray-800"
+            >
+              Sign Out
+            </button>
+          </li>
         </ul>
       </aside>
 
@@ -122,51 +129,3 @@ export default function AdminLayout({ children }) {
     </div>
   );
 }
-
-// "use client";
-
-// import Link from "next/link";
-// import { outfit } from "@/app/ui/fonts";
-// import { usePathname } from "next/navigation";
-
-// export default function AdminLayout({ children }) {
-//   const pathname = usePathname();
-
-//   const links = [
-//     { name: "Dashboard", href: "/dashboard/admin" },
-//     { name: "Users", href: "/dashboard/admin/users" },
-//     { name: "Products", href: "/dashboard/admin/products" },
-//     { name: "Orders", href: "/dashboard/admin/orders" },
-//   ];
-
-//   return (
-//     <div className="flex min-h-screen">
-//       {/* Sidebar */}
-//       <aside className="w-64 bg-slate-200 text-black p-6">
-//         <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
-
-//         <ul className="space-y-4">
-//           {links.map((link) => (
-//             <li key={link.href}>
-//               <Link
-//                 href={link.href}
-//                 className={`block p-2 rounded ${
-//                   pathname === link.href
-//                     ? "bg-red-600 text-white"
-//                     : "hover:bg-gray-800"
-//                 }`}
-//               >
-//                 {link.name}
-//               </Link>
-//             </li>
-//           ))}
-//         </ul>
-//       </aside>
-
-//       {/* Main content */}
-//       <main className="flex-1 p-6 bg-gray-100">
-//       <div className={`${outfit.className} antialiased`}>{children}</div>
-//       </main>
-//     </div>
-//   );
-// }

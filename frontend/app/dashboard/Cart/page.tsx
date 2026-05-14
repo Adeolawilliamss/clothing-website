@@ -102,13 +102,19 @@ export default function Cart() {
               <div className="mt-7 space-y-4">
                 <div className="flex justify-between text-black dark:text-white text-sm md:text-base">
                   <p>Items {totalQuantity}</p>
-                  <p>${totalAmount.toFixed(2)}</p>
+                  <p>{new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(totalAmount)}</p>
                 </div>
                 <div className="text-black dark:text-white">
                   <label htmlFor="select" className="font-bold">
                     Shipping
                     <select className="block border p-2 text-gray-600 mt-3 mb-5 w-full text-sm">
-                      <option>Standard shipping - ${shippingCost}</option>
+                      <option>Standard shipping - {new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(shippingCost)}</option>
                     </select>
                   </label>
                   <label htmlFor="Promo code" className="nt-5 font-bold">
@@ -123,7 +129,10 @@ export default function Cart() {
 
                 <div className="flex justify-between text-black dark:text-white text-base md:text-xl font-bold">
                   <p>Total Cost:</p>
-                  <p>${totalCost.toFixed(2)}</p>
+                  <p>{new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(totalCost)}</p>
                 </div>
                 <div className="text-center md:text-right">
                   <Link href="/dashboard/Checkout">

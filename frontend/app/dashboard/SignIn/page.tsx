@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import axiosInstance from "@/app/ui/axios";
 import Link from "next/link";
+import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAlert } from "@/app/Context/AlertContext";
 
@@ -19,30 +20,30 @@ export default function SignIn() {
     setShowPassword((prev) => !prev);
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    try {
-      console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
-      const res = await axiosInstance.post("/users/login", {
-        email,
-        password,
-      });
+  try {
+    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+    const res = await axiosInstance.post("/users/login", {
+      email,
+      password,
+    });
 
-      const user = res.data.data.user;
+    const user = res.data.data.user;
 
-      if (res.data.status === "success") {
-        localStorage.setItem("accessToken", res.data.accessToken);
-        localStorage.setItem("role", user.role);
-        showAlert("success", "Login successful!");
+    if (res.data.status === "success") {
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("role", user.role);
+      showAlert("success", "Login successful!");
 
-        router.push("/dashboard/admin");
-      }
-    } catch (error) {
-      showAlert("error", "Invalid email or password!");
-      console.error(error);
+      router.push("/dashboard/admin");
     }
-  };
+  } catch (error) {
+    showAlert("error", "Invalid email or password!");
+    console.error(error);
+  }
+};
 
   return (
     <div className="bg-slate-300 dark:bg-black min-h-screen flex items-center justify-center">

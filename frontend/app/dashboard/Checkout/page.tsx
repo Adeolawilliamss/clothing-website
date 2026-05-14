@@ -189,7 +189,10 @@ export default function Checkout() {
               <div className="bg-darkBlue text-white rounded-md p-6 mb-2">
                 <h4>{selectedProduct.title}</h4>
                 <h4 className="text-orange">
-                  ${selectedProduct.price.toFixed(2)}
+                  {new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(selectedProduct.price)}
                 </h4>
               </div>
             ) : (
@@ -203,7 +206,11 @@ export default function Checkout() {
                     {item.title} (x{item.quantity})
                   </h4>
                   <h4 className="text-orange">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(item.price * item.quantity)}
+                    
                   </h4>
                 </div>
               ))
@@ -212,11 +219,17 @@ export default function Checkout() {
             <hr className="my-4 border-gray-800 dark:border-white" />
             <div className="flex mt-10 justify-between text-gray-800 dark:text-white">
               <p>Shipping</p>
-              <p>${shippingCost.toFixed(2)}</p>
+              <p>{new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(shippingCost)}</p>
             </div>
             <div className="flex justify-between text-gray-800 dark:text-white font-bold">
               <p>Total</p>
-              <p>${totalCost.toFixed(2)}</p>
+              <p>{new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(totalCost)}</p>
             </div>
 
             {/* Place Order Button */}

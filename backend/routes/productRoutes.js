@@ -12,7 +12,12 @@ router.get("/:id", productController.getProduct);
 router.use(authController.protect);
 router.use(authController.restrictTo("admin"));
 
-router.post("/", productController.createProduct);
+router.post(
+  "/",
+  productController.uploadProductImage,
+  productController.resizeProductImage,
+  productController.createProduct
+);
 router.patch("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 

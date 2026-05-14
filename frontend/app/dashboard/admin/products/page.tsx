@@ -48,30 +48,54 @@ const [updateCategory, setUpdateCategory] = useState("");
 
   // Create product
   const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await axiosInstance.post("/products", {
-        title,
-        description,
-        price,
-        image,
-        category,
-      });
+  try {
+    const formData = new FormData();
 
-      setProducts((prev) => [...prev, res.data.data.product]);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", String(price));
+    formData.append("category", category);
 
-      // reset form
-      setTitle("");
-      setDescription("");
-      setPrice("");
-      setCategory("");
-
-      alert("Product created!");
-    } catch (err) {
-      console.error(err);
+    if (image) {
+      formData.append("image", image);
     }
-  };
+
+    const res = await axiosInstance.post(
+      "/products",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log(res.data);
+
+    // IMPORTANT:
+    // match exact backend response shape
+    const newProduct =
+      res.data.data.product ||
+      res.data.data.newProduct;
+
+    setProducts((prev) => [
+      ...prev,
+      newProduct,
+    ]);
+
+    // reset form
+    setTitle("");
+    setDescription("");
+    setPrice("");
+    setCategory("");
+    setImage(null);
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   // Delete product
   const handleDelete = async (id: string) => {
@@ -124,8 +148,6 @@ const handleUpdateSubmit = async (
     );
 
     setIsModalOpen(false);
-
-    alert("Product updated!");
   } catch (err) {
     console.error(err);
   }
@@ -213,7 +235,9 @@ const handleUpdateSubmit = async (
 
       {/* PRODUCTS */}
       <div className="flex flex-col gap-4">
-        {products.map((product) => (
+        {products
+  .filter(Boolean)
+  .map((product) => (
           <div
             key={product._id}
             className="border rounded-lg p-4 flex justify-between items-center"

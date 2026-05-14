@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "@/app/Context/CardContext";
 import "../ProductSection/ProductSection.css";
@@ -19,6 +20,10 @@ export default function ProductSection() {
   const [products, setProducts] = useState<Product[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const searchParams = useSearchParams();
+
+const searchQuery =
+  searchParams.get("search")?.toLowerCase() || "";
 
   const { addToCart } = useCart();
 
@@ -48,6 +53,12 @@ export default function ProductSection() {
   fetchProducts();
 }, []);
 
+const filteredProducts = products.filter((product) =>
+  product.title
+    .toLowerCase()
+    .includes(searchQuery)
+);
+
   // ✅ Loading state
   if (loading) {
     return <p className="text-center mt-10">Loading products...</p>;
@@ -66,7 +77,12 @@ export default function ProductSection() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 mt-5 gap-5">
-          {products.map((product) => (
+          {filteredProducts.length === 0 ? (
+            <p className="text-center col-span-3 text-gray-500">
+              No products found
+                  </p>
+              ) : (
+                filteredProducts.map((product) => (
             <div key={product._id} className="shadow-lg rounded p-3">
               
               {/* ✅ ONLY image clickable */}
@@ -90,7 +106,10 @@ export default function ProductSection() {
               </div>
 
               <div className="mt-4 text-center text-black dark:text-white font-bold text-lg">
-                ${product.price.toFixed(2)}
+               {new Intl.NumberFormat("en-NG", {
+  style: "currency",
+  currency: "NGN",
+}).format(product.price)}
               </div>
 
               {/* ✅ Button OUTSIDE link */}
@@ -106,7 +125,7 @@ export default function ProductSection() {
                 </button>
               </div>
             </div>
-          ))}
+          )))}
         </div>
       </div>
     </div>

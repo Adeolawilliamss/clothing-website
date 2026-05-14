@@ -9,12 +9,12 @@ export default function Footer() {
                 <hr className="w-full bg-white" />
                 <div className="flex items-center justify-center p-12 gap-2">
                     <UilTruck size={50} />
-                    <h1 className="text-2xl text-slate-100">AdeGadgets</h1>
+                    <h1 className="text-2xl text-slate-100">AdeFashion</h1>
                 </div>
                 <hr className="w-full bg-white" />
                 <div className="flex flex-col md:flex-row items-center justify-center gap-2 text-md sm:text-center dark:text-gray-400 mt-4">
                     <span>©</span>
-                    <span className="hover:underline">AdeGadgets™</span>
+                    <span className="hover:underline">AdeFashion™</span>
                     <span>. All Rights Reserved.</span>
                 </div>
             </div>

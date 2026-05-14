@@ -25,7 +25,7 @@ export default function Contact() {
                 type="email"
                 id="email"
                 className="shadow-lg bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3"
-                placeholder="name@Adeolaclothes.com"
+                placeholder="name@AdeFashion.com"
                 required
               />
             </div>

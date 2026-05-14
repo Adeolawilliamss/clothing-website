@@ -1,6 +1,76 @@
+const multer = require("multer");
+const sharp = require("sharp");
 const Product = require("../models/productModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
+const cloudinary = require("../config/cloudinary");
+const { Readable } = require("stream");
+
+// MEMORY STORAGE for image buffer
+const multerStorage = multer.memoryStorage();
+
+// FILTER only images
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image! please upload only images.", 400), false);
+  }
+};
+
+// Multer upload middleware
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+// Convert buffer to readable stream (for Cloudinary)
+const bufferToStream = (buffer) => {
+  const readable = new Readable();
+  readable._read = () => {};
+  readable.push(buffer);
+  readable.push(null);
+  return readable;
+};
+
+// Upload to Cloudinary instead of local file system
+exports.uploadProductImage = upload.single("image");
+
+exports.resizeProductImage = catchAsync(
+  async (req, res, next) => {
+    if (!req.file) return next();
+
+    const buffer = await sharp(req.file.buffer)
+      .resize(500, 500)
+      .toFormat("jpeg")
+      .jpeg({ quality: 90 })
+      .toBuffer();
+
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "products",
+        format: "jpeg",
+        public_id: `product-${Date.now()}`,
+      },
+      (error, result) => {
+        if (error) {
+          return next(
+            new AppError(
+              "Cloudinary upload failed",
+              500
+            )
+          );
+        }
+
+        req.body.image = result.secure_url;
+
+        next();
+      }
+    );
+
+    bufferToStream(buffer).pipe(stream);
+  }
+);
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   const products = await Product.find();
