@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useCart } from "@/app/Context/CardContext";
 import fallbackProducts from "../../data/fallbackProducts";
+import { Product } from "@/lib/definitions";
 
 export default function ItemDetails() {
   const { id } = useParams();
@@ -12,15 +13,6 @@ export default function ItemDetails() {
   const router = useRouter();
   const { addToCart, setSelectedProduct } = useCart(); // Access setSelectedProduct from the context
   const [error, setError] = useState(false);
-
-  interface Product {
-  _id: string | number;
-  title: string;
-  price: number;
-  image: string;
-  category: string;
-  description: string;
-}
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -38,7 +30,7 @@ export default function ItemDetails() {
 
         // ✅ Find product from fallback using ID
        const fallback = fallbackProducts.find(
-  (p) => p._id === Number(id)
+  (p) => String(p._id) === String(id)
 );
 
         setProduct(fallback || fallbackProducts[0]); // fallback safety

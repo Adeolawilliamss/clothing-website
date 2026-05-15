@@ -1,31 +1,6 @@
- declare module '@iconscout/react-unicons' {
-    export const UilTruck: any;
-}
-
- declare module '@iconscout/react-unicons' {
-    export const UilShoppingCart: any;
-}
-
- declare module '@iconscout/react-unicons' {
-    export const UilTimes: any;
-}
-
-  declare module '@iconscout/react-unicons' {
-    export const UilUser: any;
-}
-
-  declare module '@iconscout/react-unicons' {
-    export const UilBars: any;
-}
-
-
-declare module '@iconscout/react-unicons' {
-  export const UilShoppingCartAlt: any;
-}
-  
-// Define a type for cart items
-interface CartItem {
-  id: string;
+  // Define a type for cart items
+export interface CartItem {
+  _id: string | number;
   title: string;
   image: string;
   price: number;
@@ -33,10 +8,8 @@ interface CartItem {
   category: string;
 }
 
-
-// Define the Product type
-interface Product {
-  id: number;
+export interface Product {
+  _id: string | number;
   title: string;
   price: number;
   image: string;

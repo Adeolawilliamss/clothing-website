@@ -9,207 +9,249 @@ import {
   UilTimes,
   UilBars,
 } from "@iconscout/react-unicons";
+
 import { useCart } from "@/app/Context/CardContext";
 import clsx from "clsx";
+
 import {
   usePathname,
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import "./Navbar.css";
+
+import { CartItem } from "@/lib/definitions";
 
 export default function Nav() {
   const router = useRouter();
-const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
-const [search, setSearch] = useState(
-  searchParams.get("search") || ""
-);
-const [searchLoading, setSearchLoading] = useState(false);
+  const [search, setSearch] = useState(
+    searchParams.get("search") || ""
+  );
+
+  const [searchLoading, setSearchLoading] =
+    useState(false);
+
   const [isOpen, setIsOpen] = useState(false);
+
   const { cartItems } = useCart();
+
   const pathname = usePathname();
 
-  const mobileNavOpen = () => {
-    setIsOpen(true);
-  };
-
-  const mobileNavClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleLinkClick = () => {
-    mobileNavClose(); // Close the menu when a link is clicked
-  };
-
-  // Typing the reduce parameters
   const totalItems = cartItems.reduce(
-    (total: number, item: CartItem) => total + item.quantity,
-    0,
+    (total: number, item: CartItem) =>
+      total + item.quantity,
+    0
   );
 
   useEffect(() => {
-  // Don't search if input empty
-  if (!search.trim()) return;
+    if (!search.trim()) return;
 
-  setSearchLoading(true);
+    setSearchLoading(true);
 
-  const timeout = setTimeout(() => {
-    router.replace(
-      `/dashboard/Menu?search=${search}`
-    );
+    const timeout = setTimeout(() => {
+      router.replace(
+        `/dashboard/Menu?search=${search}`
+      );
 
-    setSearchLoading(false);
-  }, 500);
+      setSearchLoading(false);
+    }, 500);
 
-  return () => clearTimeout(timeout);
-}, [search, router]);
+    return () => clearTimeout(timeout);
+  }, [search, router]);
+
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
 
   return (
-    <nav
-      id="nav"
-      className="fixed w-full top-0 bg-slate-200 py-4 border-b-4 z-50"
-    >
-      <div className="container mx-auto px-4">
-        <div className="nav-container flex flex-wrap items-center justify-between">
-          <div className="block md:hidden">
-            <button
-              onClick={mobileNavOpen}
-              type="button"
-              className={
-                !isOpen
-                  ? "inline-flex items-center p-2 text-sm md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
-                  : "hidden"
-              }
-              aria-label="Open menu"
-              title="Open menu"
-            >
-              <UilBars size={35} />
-            </button>
+    <nav className="fixed top-0 z-50 w-full border-b-4 bg-slate-200 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4">
+        
+        {/* LEFT */}
+        <div className="flex items-center gap-3">
 
-            <button
-              onClick={mobileNavClose}
-              type="button"
-              className={
-                isOpen
-                  ? "inline-flex items-center p-2 text-sm md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
-                  : "hidden"
-              }
-              aria-label="Close menu"
-              title="Close menu"
-            >
-              <UilTimes size={35} />
-            </button>
-          </div>
+          {/* MOBILE MENU BUTTON */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden"
+          >
+            {isOpen ? (
+              <UilTimes className="h-8 w-8" />
+            ) : (
+              <UilBars className="h-8 w-8" />
+            )}
+          </button>
 
+          {/* LOGO */}
           <Link href="/dashboard">
             <div className="flex items-center gap-2">
-              <UilTruck size={35} />
-              <h1 className="mt-1 text-lg text-black dark:text-red-500">
+              <UilTruck className="h-7 w-7 sm:h-8 sm:w-8" />
+
+              <h1 className="text-sm font-bold sm:text-lg">
                 AdeFashion
               </h1>
             </div>
           </Link>
+        </div>
 
-          <div className="nav-list flex-1 justify-center md:flex lg:flex">
-            <ul className="flex flex-row gap-5">
-              <Link href="/dashboard" onClick={handleLinkClick}>
-                <li
-                  className={clsx("font-bold hover:text-red-600", {
-                    "text-red-600": pathname === "/dashboard",
-                  })}
-                >
-                  Home
-                </li>
-              </Link>
+        {/* DESKTOP NAV */}
+        <div className="hidden md:flex">
+          <ul className="flex items-center gap-6">
+            <Link href="/dashboard">
+              <li
+                className={clsx(
+                  "font-semibold hover:text-red-600",
+                  {
+                    "text-red-600":
+                      pathname === "/dashboard",
+                  }
+                )}
+              >
+                Home
+              </li>
+            </Link>
 
-              <Link href="/dashboard/Menu" onClick={handleLinkClick}>
-                <li
-                  className={clsx("font-bold hover:text-red-600", {
-                    "text-red-600": pathname === "/dashboard/Menu",
-                  })}
-                >
-                  Products
-                </li>
-              </Link>
+            <Link href="/dashboard/Menu">
+              <li
+                className={clsx(
+                  "font-semibold hover:text-red-600",
+                  {
+                    "text-red-600":
+                      pathname === "/dashboard/Menu",
+                  }
+                )}
+              >
+                Products
+              </li>
+            </Link>
 
-              <Link href="/dashboard/About" onClick={handleLinkClick}>
-                <li
-                  className={clsx("font-bold hover:text-red-600", {
-                    "text-red-600": pathname === "/dashboard/About",
-                  })}
-                >
-                  About
-                </li>
-              </Link>
+            <Link href="/dashboard/About">
+              <li
+                className={clsx(
+                  "font-semibold hover:text-red-600",
+                  {
+                    "text-red-600":
+                      pathname === "/dashboard/About",
+                  }
+                )}
+              >
+                About
+              </li>
+            </Link>
 
-              <Link href="/dashboard/Contact" onClick={handleLinkClick}>
-                <li
-                  className={clsx("font-bold hover:text-red-600", {
-                    "text-red-600": pathname === "/dashboard/Contact",
-                  })}
-                >
-                  Contact
-                </li>
-              </Link>
-            </ul>
+            <Link href="/dashboard/Contact">
+              <li
+                className={clsx(
+                  "font-semibold hover:text-red-600",
+                  {
+                    "text-red-600":
+                      pathname === "/dashboard/Contact",
+                  }
+                )}
+              >
+                Contact
+              </li>
+            </Link>
+          </ul>
+        </div>
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-3 sm:gap-4">
+
+          {/* SEARCH */}
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+              className="
+                w-24
+                rounded
+                border
+                px-2
+                py-1
+                text-sm
+                text-black
+                sm:w-40
+                md:w-56
+              "
+            />
+
+            {searchLoading ? (
+              <span className="text-xs text-gray-500">
+                ...
+              </span>
+            ) : (
+              <FaSearch className="text-xl" />
+            )}
           </div>
 
-          <div className="flex relative items-center gap-4">
-<div className="flex items-center gap-2">
-  <input
-    type="text"
-    placeholder="Search products..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    className="border rounded px-3 py-1 text-black w-40 md:w-56"
-  />
-
-  {searchLoading ? (
-    <span className="text-xs text-gray-500">
-      Loading...
-    </span>
-  ) : (
-    <FaSearch size={28} />
-  )}
-</div>
-
+          {/* CART */}
+          <div className="relative">
             <Link href="/dashboard/Cart">
-              <UilShoppingCart size={35} />
+              <UilShoppingCart className="h-7 w-7 sm:h-8 sm:w-8" />
             </Link>
-            <span className="absolute right-0 left-15 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-xs leading-tight text-center">
+
+            <span
+              className="
+                absolute
+                -right-2
+                -top-2
+                flex
+                h-5
+                w-5
+                items-center
+                justify-center
+                rounded-full
+                bg-red-600
+                text-xs
+                text-white
+              "
+            >
               {totalItems}
             </span>
           </div>
-
-          {/* The List that shows when the menu is clicked */}
-          <div
-            className={
-              isOpen
-                ? "md:items-center justify-between w-full md:flex md:w-auto"
-                : "hidden"
-            }
-          >
-            <ul className="md:flex flex-col p-6 gap-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white">
-              <Link href="/dashboard" onClick={handleLinkClick}>
-                <li>Home</li>
-              </Link>
-
-              <Link href="/dashboard/Menu" onClick={handleLinkClick}>
-                <li>Products</li>
-              </Link>
-
-              <Link href="/dashboard/About" onClick={handleLinkClick}>
-                <li>About</li>
-              </Link>
-
-              <Link href="/dashboard/Contact" onClick={handleLinkClick}>
-                <li>Contact</li>
-              </Link>
-            </ul>
-          </div>
         </div>
       </div>
+
+      {/* MOBILE MENU */}
+      {isOpen && (
+        <div className="border-t bg-slate-200 md:hidden">
+          <ul className="flex flex-col gap-4 px-4 py-6">
+            <Link
+              href="/dashboard"
+              onClick={handleLinkClick}
+            >
+              <li>Home</li>
+            </Link>
+
+            <Link
+              href="/dashboard/Menu"
+              onClick={handleLinkClick}
+            >
+              <li>Products</li>
+            </Link>
+
+            <Link
+              href="/dashboard/About"
+              onClick={handleLinkClick}
+            >
+              <li>About</li>
+            </Link>
+
+            <Link
+              href="/dashboard/Contact"
+              onClick={handleLinkClick}
+            >
+              <li>Contact</li>
+            </Link>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

@@ -29,11 +29,11 @@ export function CartProvider({ children }) {
 
   const addToCart = (item) => {
     setCartItems((prevItems) => {
-      const itemExists = prevItems.find((i) => i.id === item.id);
+      const itemExists = prevItems.find((i) => i._id === item._id);
 
       if (itemExists) {
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i._id === item._id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
       return [...prevItems, { ...item, quantity: 1 }];
@@ -45,24 +45,24 @@ export function CartProvider({ children }) {
 
   const removeFromCart = (item) => {
     setCartItems((prevItems) => {
-      const itemExists = prevItems.find((i) => i.id === item.id);
+      const itemExists = prevItems.find((i) => i._id === item._id);
   
       if (itemExists.quantity > 1) {
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+          i._id === item._id ? { ...i, quantity: i.quantity - 1 } : i
         );
       }
   
       // If quantity is 1, remove the item from the cart
-      return prevItems.filter((i) => i.id !== item.id);
+      return prevItems.filter((i) => i._id !== item._id);
     });
   
     toast.error('Item Deleted', { position: 'bottom-left' });
   };
 
 
-  const clearItemCart = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const clearItemCart = (_id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item._id !== _id));
     toast.error('Item removed from cart', { position: 'bottom-left' });
   };
 

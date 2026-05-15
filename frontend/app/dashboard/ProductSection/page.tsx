@@ -8,15 +8,8 @@ import { useCart } from "@/app/Context/CardContext";
 import { FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
 import Loading from "@/app/ui/Loading";
+import { Product } from "@/lib/definitions";
 
-interface Product {
-  _id: number;
-  title: string;
-  price: number;
-  image: string;
-  category: string;
-}
-// ✅ Keep categories (unchanged)
 const categories = [
   "All",
   "men's clothing",
@@ -92,7 +85,7 @@ export default function ProductSection() {
 
         <div className="under-links mt-10">
           {/* ✅ CATEGORY TABS */}
-          <ul className="tabs flex flex-col md:flex-row mx-auto justify-center gap-2">
+          <ul className="tabs flex flex-col md:flex-row mx-auto justify-center gap-1">
             {categories.map((category, index) => (
               <li key={index} className="list">
                 <button
@@ -144,15 +137,31 @@ export default function ProductSection() {
                   </div>
 
                   {/* ✅ Add to cart */}
-                  <div className="flex justify-center mt-3">
-                    <button
-                      className="add-to-cart-btn flex items-center gap-2"
-                      onClick={() => addToCart({ ...product, quantity: 1 })}
-                    >
-                      <FaShoppingCart />
-                      Add to cart
-                    </button>
-                  </div>
+                 <div className="flex justify-center mt-3">
+  <button
+    onClick={() => addToCart({ ...product, quantity: 1 })}
+    className="
+      flex items-center gap-2
+      px-5 py-2.5
+      bg-red-600 text-white
+      text-xs font-bold uppercase tracking-wide
+      rounded-full
+      shadow-md shadow-red-200
+
+      transition-all duration-300 ease-in-out
+
+      hover:bg-white hover:text-red-600
+      hover:border hover:border-red-600
+      hover:shadow-lg
+      hover:-translate-y-0.5
+
+      active:scale-95
+    "
+  >
+    <FaShoppingCart className="text-sm" />
+    Add to cart
+  </button>
+</div>
                 </div>
               ))
             )}

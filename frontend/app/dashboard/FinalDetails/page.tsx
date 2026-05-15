@@ -6,6 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import Loading from "@/app/ui/Loading"
+import { CartItem } from "@/lib/definitions";
 
 export default function FinalDetails() {
   const { cartItems, clearCart, billingDetails, selectedProduct } = useCart();
@@ -79,7 +80,7 @@ export default function FinalDetails() {
               ) : (
                 // Otherwise, display the items from the cart
                 cartItems.map((item: CartItem) => (
-                  <div key={item.id} className="bg-darkBlue text-white flex justify-between items-center rounded-md p-6 mb-2">
+                  <div key={item._id} className="bg-darkBlue text-white flex justify-between items-center rounded-md p-6 mb-2">
                     <h4>{item.title} (x{item.quantity})</h4>
                     <div className='group'>
                       <img

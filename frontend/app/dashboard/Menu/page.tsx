@@ -7,14 +7,7 @@ import { useCart } from "@/app/Context/CardContext";
 import "../ProductSection/ProductSection.css";
 import Link from "next/link";
 import fallbackProducts from "../data/fallbackProducts";
-
-interface Product {
-  _id: number;
-  title: string;
-  price: number;
-  image: string;
-  category: string;
-}
+import { Product } from "@/lib/definitions";
 
 export default function ProductSection() {
   const [products, setProducts] = useState<Product[]>([]); 

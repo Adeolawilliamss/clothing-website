@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/ui/axios";
 import { toast } from "react-toastify";
 import Loading from "@/app/ui/Loading";
+import { CartItem } from "@/lib/definitions";
 
 export default function Checkout() {
   const { cartItems, selectedProduct, setBillingDetails } = useCart();
@@ -83,20 +84,6 @@ export default function Checkout() {
     }
     return true;
   };
-
-  // Handle placing order and store billing details
-  // const handlePlaceOrder = () => {
-  //   if (!validateForm()) {
-  //     toast.error("Please fill in all fields before placing the order", {
-  //       position: "bottom-left",
-  //     });
-  //     return;
-  //   }
-
-  //   // If form is valid, store billing details and navigate to FinalDetails
-  //   setBillingDetails(input);
-  //   router.push("/dashboard/FinalDetails"); // Programmatically navigate to FinalDetails
-  // };
 
   const handlePaystack = () => {
     if (!validateForm()) {
@@ -199,7 +186,7 @@ export default function Checkout() {
               // Otherwise, show cart items
               cartItems.map((item: CartItem) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="bg-darkBlue text-white rounded-md p-6 mb-2"
                 >
                   <h4>

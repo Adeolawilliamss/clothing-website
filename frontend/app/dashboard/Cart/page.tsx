@@ -3,6 +3,7 @@
 import { UilShoppingCartAlt } from "@iconscout/react-unicons";
 import { useCart } from "@/app/Context/CardContext";
 import Link from "next/link";
+import { CartItem } from "@/lib/definitions";
 
 export default function Cart() {
   const { cartItems, removeFromCart, addToCart, clearItemCart } = useCart();
@@ -56,7 +57,7 @@ export default function Cart() {
               <div className="mt-7 space-y-5">
                 {cartItems.map((item: CartItem) => (
                   <div
-                    key={item.id}
+                    key={item._id}
                     className="flex flex-col md:flex-row items-center md:space-x-5 mb-5"
                   >
                     <img
@@ -70,7 +71,7 @@ export default function Cart() {
                       </div>
                       <div className="text-sm text-center md:text-left text-gray-500">{item.category}</div>
                       <p
-                        onClick={() => clearItemCart(item.id)}
+                        onClick={() => clearItemCart(item._id)}
                         className="mx-0 mt-1 mb-0 text-md text-center md:text-left text-red-700 cursor-pointer font-bold"
                       >
                         Remove
