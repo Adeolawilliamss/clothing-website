@@ -115,7 +115,23 @@ const filteredProducts = products.filter((product) =>
               {/* ✅ Button OUTSIDE link */}
               <div className="flex items-center justify-center mt-3">
                 <button
-                  className="add-to-cart-btn flex items-center gap-2"
+                  className="
+      flex items-center gap-2
+      px-5 py-2.5
+      bg-red-600 text-white
+      text-xs font-bold uppercase tracking-wide
+      rounded-full
+      shadow-md shadow-red-200
+
+      transition-all duration-300 ease-in-out
+
+      hover:bg-white hover:text-red-600
+      hover:border hover:border-red-600
+      hover:shadow-lg
+      hover:-translate-y-0.5
+
+      active:scale-95
+    "
                   onClick={() =>
                     addToCart({ ...product, quantity: 1 })
                   }
