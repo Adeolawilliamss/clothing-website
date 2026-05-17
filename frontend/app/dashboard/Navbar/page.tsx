@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
+import { Suspense } from "react";
 import {
   UilTruck,
   UilShoppingCart,
@@ -12,25 +13,25 @@ import {
 
 import { useCart } from "@/app/Context/CardContext";
 import clsx from "clsx";
+import Search from "./search";
+import "./Navbar.css";
 
 import {
   usePathname,
   useRouter,
-  useSearchParams,
 } from "next/navigation";
 
 import { CartItem } from "@/lib/definitions";
 
 export default function Nav() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const [search, setSearch] = useState(
-    searchParams.get("search") || ""
-  );
+  const [search, setSearch] = useState("");
 
   const [searchLoading, setSearchLoading] =
     useState(false);
+
+    const [showSearch, setShowSearch] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -45,20 +46,28 @@ export default function Nav() {
   );
 
   useEffect(() => {
-    if (!search.trim()) return;
-
-    setSearchLoading(true);
-
-    const timeout = setTimeout(() => {
+  const timeout = setTimeout(() => {
+    // If user typed something
+    if (search.trim()) {
       router.replace(
         `/dashboard/Menu?search=${search}`
       );
+    }
 
-      setSearchLoading(false);
-    }, 500);
+    // If search is empty AND user is already on Menu page
+    else if (pathname === "/dashboard/Menu") {
+      router.replace("/dashboard/Menu");
+    }
 
-    return () => clearTimeout(timeout);
-  }, [search, router]);
+    setSearchLoading(false);
+  }, 500);
+
+  return () => clearTimeout(timeout);
+}, [search, router, pathname]);
+
+useEffect(() => {
+  setShowSearch(false);
+}, [pathname]);
 
   const handleLinkClick = () => {
     setIsOpen(false);
@@ -67,6 +76,10 @@ export default function Nav() {
   return (
     <nav className="fixed top-0 z-50 w-full border-b-4 bg-slate-200 py-4">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4">
+
+        <Suspense fallback={null}>
+  <Search setSearch={setSearch} />
+</Suspense>
         
         {/* LEFT */}
         <div className="flex items-center gap-3">
@@ -84,11 +97,14 @@ export default function Nav() {
           </button>
 
           {/* LOGO */}
-          <Link href="/dashboard">
-            <div className="flex items-center gap-2">
+          <Link
+  href="/dashboard"
+  className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0"
+>
+  <div className="flex items-center gap-2">
               <UilTruck className="h-7 w-7 sm:h-8 sm:w-8" />
 
-              <h1 className="text-sm font-bold sm:text-lg">
+              <h1 className="desktop-nav text-sm font-bold sm:text-lg">
                 AdeFashion
               </h1>
             </div>
@@ -96,7 +112,7 @@ export default function Nav() {
         </div>
 
         {/* DESKTOP NAV */}
-        <div className="hidden md:flex">
+        <div className="desktop-nav">
           <ul className="flex items-center gap-6">
             <Link href="/dashboard">
               <li
@@ -160,35 +176,20 @@ export default function Nav() {
         <div className="flex items-center gap-3 sm:gap-4">
 
           {/* SEARCH */}
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-              className="
-                w-24
-                rounded
-                border
-                px-2
-                py-1
-                text-sm
-                text-black
-                sm:w-40
-                md:w-56
-              "
-            />
-
-            {searchLoading ? (
-              <span className="text-xs text-gray-500">
-                ...
-              </span>
-            ) : (
-              <FaSearch className="text-xl" />
-            )}
-          </div>
+          {/* SEARCH ICON */}
+<button
+  onClick={() =>
+    setShowSearch(!showSearch)
+  }
+>
+  {searchLoading ? (
+    <span className="text-xs text-gray-500">
+      ...
+    </span>
+  ) : (
+    <FaSearch className="text-xl" />
+  )}
+</button>
 
           {/* CART */}
           <div className="relative">
@@ -217,6 +218,29 @@ export default function Nav() {
           </div>
         </div>
       </div>
+
+      {/* SEARCH DROPDOWN */}
+{showSearch && (
+  <div className="absolute left-0 top-full w-full border-t bg-slate-200 px-4 py-4 shadow-md">
+    <input
+      type="text"
+      placeholder="Search products..."
+      value={search}
+      onChange={(e) =>
+        setSearch(e.target.value)
+      }
+      className="
+        w-full
+        rounded-md
+        border
+        px-4
+        py-3
+        text-black
+        outline-none
+      "
+    />
+  </div>
+)}
 
       {/* MOBILE MENU */}
       {isOpen && (

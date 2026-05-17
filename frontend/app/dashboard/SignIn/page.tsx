@@ -95,7 +95,7 @@ export default function SignIn() {
           </button>
 
           <div className="mt-4 text-sm text-gray-500">
-            Don't have an account? <Link href="/signup">Sign Up</Link>
+            Don&apos;t have an account? <Link href="/signup">Sign Up</Link>
           </div>
         </form>
       </div>

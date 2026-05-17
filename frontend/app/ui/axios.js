@@ -10,13 +10,19 @@ const axiosInstance = axios.create({
 NProgress.configure({ showSpinner: false });
 
 // Request interceptor: attach access token
+// Request interceptor: attach access token
 axiosInstance.interceptors.request.use(
   (config) => {
     NProgress.start();
 
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    // ✅ check if browser exists
+    if (typeof window !== "undefined") {
+      const accessToken =
+        localStorage.getItem("accessToken");
+
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
     }
 
     return config;

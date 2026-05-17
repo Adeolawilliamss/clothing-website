@@ -4,6 +4,7 @@ import { UilShoppingCartAlt } from "@iconscout/react-unicons";
 import { useCart } from "@/app/Context/CardContext";
 import Link from "next/link";
 import { CartItem } from "@/lib/definitions";
+import Image from "next/image";
 
 export default function Cart() {
   const { cartItems, removeFromCart, addToCart, clearItemCart } = useCart();
@@ -33,7 +34,7 @@ export default function Cart() {
               </h3>
               <p className="mb-3 font-light text-gray-500 dark:text-white">
                 Before proceeding to checkout, add some products to your cart.
-                You will find a lot of interesting products on our "Product" page.
+                You will find a lot of interesting products on our Product page.
               </p>
               <Link href="/dashboard/Menu">
                 <button className="border p-2 mt-2 inline-flex items-center bg-blue-600 text-white hover:bg-blue-700">
@@ -60,9 +61,11 @@ export default function Cart() {
                     key={item._id}
                     className="flex flex-col md:flex-row items-center md:space-x-5 mb-5"
                   >
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.title}
+                      width={800}
+                      height={600}
                       className="h-20 w-20 object-contain mb-3 md:mb-0"
                     />
                     <div className="flex flex-col flex-grow">

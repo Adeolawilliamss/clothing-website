@@ -209,11 +209,11 @@ const handleUpdateSubmit = async (
   <option value="">Select Category</option>
 
   <option value="men's clothing">
-    Men's Clothing
+    Men&apos;s Clothing
   </option>
 
   <option value="women's clothing">
-    Women's Clothing
+    Women&apos;s Clothing
   </option>
 
   <option value="jewelery">
@@ -328,11 +328,11 @@ const handleUpdateSubmit = async (
           <option value="">Select Category</option>
 
           <option value="men's clothing">
-            Men's Clothing
+            Men&apos;s Clothing
           </option>
 
           <option value="women's clothing">
-            Women's Clothing
+            Women&apos;s Clothing
           </option>
 
           <option value="jewelery">

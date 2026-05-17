@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 
 export const metadata:Metadata = {
   title:'About'
@@ -48,11 +49,14 @@ export default function About() {
           <div className="mt-20 md:mt-16">
             <h1 className="text-black dark:text-white text-xl md:text-2xl">Why Choose Us?</h1>
             <div className="flex flex-col lg:flex-row items-center mt-4">
-              <img 
-                src="/About-End.jpeg" 
-                className="rounded-lg w-full lg:w-1/2 object-contain h-48 md:h-64 lg:h-auto" 
-                alt="Why Choose Us" 
-              />
+              <div className="relative w-full lg:w-1/2 h-48 md:h-64 lg:h-auto">
+  <Image
+    src="/About-End.jpeg"
+    alt="Why Choose Us"
+    fill
+    className="rounded-lg object-contain"
+  />
+</div>
               <div className="lg:ml-8 mt-8 lg:mt-0">
                 <p className="text-black dark:text-white text-xs md:text-base">
                   Justo. Nunc. Montes ligula est nunc molestie feugiat rutrum risus ultricies eros, penatibus elit senectus montes.

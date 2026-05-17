@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useState, useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "@/app/Context/CardContext";
 import "../ProductSection/ProductSection.css";
 import Link from "next/link";
 import fallbackProducts from "../data/fallbackProducts";
 import { Product } from "@/lib/definitions";
+import Image from "next/image";
+import SearchQuery from "../Menu/searchQuery";
 
 export default function ProductSection() {
   const [products, setProducts] = useState<Product[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const searchParams = useSearchParams();
 
-const searchQuery =
-  searchParams.get("search")?.toLowerCase() || "";
+  const [searchQuery, setSearchQuery] =
+  useState("");
 
   const { addToCart } = useCart();
 
@@ -60,6 +60,11 @@ const filteredProducts = products.filter((product) =>
   return (
     <div className="relative py-4 pt-12 mb-10 bg-white dark:bg-black min-h-full">
       <div className="container mx-auto px-4">
+        <Suspense fallback={null}>
+  <SearchQuery
+    setSearchQuery={setSearchQuery}
+  />
+</Suspense>
         <hr className="w-full" />
 
         {/* ✅ Error message */}
@@ -81,9 +86,11 @@ const filteredProducts = products.filter((product) =>
               {/* ✅ ONLY image clickable */}
               <Link href={`/dashboard/products/${product._id}`}>
                 <div className="mt-5 group cursor-pointer">
-                   <img
+                   <Image
                        src={product.image}
                         alt={product.title}
+                        width={800}
+                      height={600}
                     className="h-32 mx-auto object-contain transition-transform duration-200 group-hover:scale-110"
                   />
                 </div>

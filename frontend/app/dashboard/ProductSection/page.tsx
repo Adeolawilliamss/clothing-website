@@ -9,6 +9,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
 import Loading from "@/app/ui/Loading";
 import { Product } from "@/lib/definitions";
+import Image from "next/image";
 
 const categories = [
   "All",
@@ -112,9 +113,11 @@ export default function ProductSection() {
                   {/* ✅ Clickable image */}
                   <Link href={`/dashboard/products/${product._id}`}>
                     <div className="mt-5 group cursor-pointer">
-                      <img
+                      <Image
                         src={product.image}
                         alt={product.title}
+                        width={800}
+                        height={600}
                         className="h-32 mx-auto object-contain transition-transform duration-200 group-hover:scale-110"
                       />
                     </div>

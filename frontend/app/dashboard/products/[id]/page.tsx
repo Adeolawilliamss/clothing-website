@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useCart } from "@/app/Context/CardContext";
 import fallbackProducts from "../../data/fallbackProducts";
 import { Product } from "@/lib/definitions";
+import Image from "next/image";
 
 export default function ItemDetails() {
   const { id } = useParams();
@@ -75,12 +76,14 @@ export default function ItemDetails() {
         >
           {/* Product Image */}
           <div className="group">
-            <img
+            <Image
               src={
                 product.image ||
                 `https://picsum.photos/400?random=${product._id}`
               }
               alt={product.title}
+              width={400}
+              height={300}
               className="w-20 h-20 md:h-[25rem] md:w-[25rem] object-contain transition-transform duration-200 transform group-hover:scale-110 mb-3 md:mb-0"
             />
           </div>

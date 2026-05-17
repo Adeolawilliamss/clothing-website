@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import Loading from "@/app/ui/Loading"
 import { CartItem } from "@/lib/definitions";
+import Image from "next/image";
 
 export default function FinalDetails() {
   const { cartItems, clearCart, billingDetails, selectedProduct } = useCart();
@@ -69,9 +70,11 @@ export default function FinalDetails() {
                 <div className="bg-darkBlue text-white flex justify-between items-center rounded-md p-6 mb-2">
                   <h4>{selectedProduct.title}</h4>
                   <div className='group'>
-                    <img
+                    <Image
                       src={selectedProduct.image}
                       alt={selectedProduct.title}
+                      width={800}
+                      height={600}
                       className="w-12 h-12 md:h-[6rem] md:w-[6rem] object-contain transition-transform duration-200 transform group-hover:scale-110 mb-3 md:mb-0"
                     />
                   </div>
@@ -83,9 +86,11 @@ export default function FinalDetails() {
                   <div key={item._id} className="bg-darkBlue text-white flex justify-between items-center rounded-md p-6 mb-2">
                     <h4>{item.title} (x{item.quantity})</h4>
                     <div className='group'>
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.title}
+                        width={800}
+                        height={600}
                         className="w-12 h-12 md:h-[6rem] md:w-[6rem] object-contain transition-transform duration-200 transform group-hover:scale-110 mb-3 md:mb-0"
                       />
                     </div>
